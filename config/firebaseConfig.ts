@@ -29,22 +29,49 @@ const initializeFirebaseApp = () => {
   try {
     app = initializeApp(firebaseConfig);
     firestoreDB = getFirestore();
+
     return app;
   } catch (error) {
-    console.log("Error initialize firebase, error: " + error);
+    console.log(`Error initialize firebase, error: ${error}`);
   }
 };
 
-const uploadProcessedData = async (userData: User) => {
-  let uuid = uuidv4();
+const updateData = async (collectionName: string, uuid: string, user: User) => {
   try {
-    const document = doc(firestoreDB, "users", uuid);
-    let userUpdated = await setDoc(document, userData);
-    console.log(userUpdated);
-    console.log(uuid);
-    return userUpdated;
+    const collectionRef = collection(firestoreDB, collectionName);
+    const finalData = [];
+    const q = query(collectionRef, where("uuid", "==", uuid));
+
+    const docSnap = await getDocs(q);
+
+    docSnap.forEach((doc) => {
+      finalData.push(doc.ref);
+    });
+
+    if (finalData.length == 0) {
+      throw new Error(
+        `Data with uuid: ${uuid} not found in collection: ${collectionName}`
+      );
+    }
+
+    await updateDoc(finalData[0], {
+      ...user,
+    });
   } catch (error) {
-    console.log("Error upload processed data, error: " + error);
+    console.log(`Error: ${error.message}`);
+  }
+};
+
+const insertData = async (collectionName: string, data: any) => {
+  let uuid = uuidv4();
+
+  try {
+    const document = doc(firestoreDB, collectionName, uuid);
+    await setDoc(document, data);
+
+    console.log(`New data inserted with uuid: ${uuid}`);
+  } catch (error) {
+    console.log(`Error: ${error}`);
   }
 };
 
@@ -84,25 +111,4 @@ const getUser = async (uuid: string) => {
   }
 };
 
-const updateUser = async (uuid: string, user: User) => {
-  try {
-    const document = doc(firestoreDB, "users", uuid);
-    const dataUpdated = await updateDoc(document, {
-      ...user,
-    });
-    return dataUpdated;
-  } catch (error) {
-    console.log("Error get user, error: " + error);
-  }
-};
-
-const getFirebaseApp = () => app;
-
-export {
-  getAllUser,
-  getFirebaseApp,
-  getUser,
-  initializeFirebaseApp,
-  updateUser,
-  uploadProcessedData,
-};
+export { getAllUser, getUser, initializeFirebaseApp, insertData, updateData };

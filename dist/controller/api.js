@@ -15,35 +15,64 @@ const firebaseConfig_1 = require("../config/firebaseConfig");
 const updateUserData = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const uuid = req.params.uuid || "";
+        if (uuid == "") {
+            throw new Error("uuid in query params is empty");
+        }
+        if (req.body["firstName"] == "" || req.body["firstName"] == undefined) {
+            throw new Error("firstName is required");
+        }
+        if (req.body["lastName"] == "" || req.body["lastName"] == undefined) {
+            throw new Error("lastName is required");
+        }
         const user = {
             firstName: req.body["firstName"],
             lastName: req.body["lastName"],
         };
         console.log(user);
-        const newDoc = yield (0, firebaseConfig_1.updateUser)(uuid, user);
-        console.log(newDoc);
-        res.status(200).send(`User updated a new user`);
+        yield (0, firebaseConfig_1.updateData)("users", uuid, user);
+        res.status(200).json({
+            data: Object.assign(Object.assign({}, user), { uuid: uuid }),
+            success: true,
+            message: `User with uuid: ${uuid} is updated`,
+        });
     }
     catch (error) {
-        res.status(400).send(`User should contain firstName, lastName:`);
+        res.status(400).json({
+            data: null,
+            success: false,
+            message: error.message,
+        });
     }
 });
 exports.updateUserData = updateUserData;
 const insertUserData = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let uuid = (0, uuid_1.v4)();
+        if (req.body["firstName"] == "" || req.body["firstName"] == undefined) {
+            throw new Error("firstName is required");
+        }
+        if (req.body["lastName"] == "" || req.body["lastName"] == undefined) {
+            throw new Error("lastName is required");
+        }
         const user = {
             firstName: req.body["firstName"],
             lastName: req.body["lastName"],
             uuid: uuid,
         };
         console.log(user);
-        const newDoc = yield (0, firebaseConfig_1.uploadProcessedData)(user);
-        console.log(newDoc);
-        res.status(201).send(`Created a new user`);
+        yield (0, firebaseConfig_1.insertData)("users", user);
+        res.status(201).json({
+            data: user,
+            success: true,
+            message: "User inserted",
+        });
     }
     catch (error) {
-        res.status(400).send(`User should contain firstName, lastName:`);
+        res.status(400).json({
+            data: null,
+            success: false,
+            message: error.message,
+        });
     }
 });
 exports.insertUserData = insertUserData;
