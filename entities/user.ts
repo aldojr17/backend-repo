@@ -1,5 +1,5 @@
 interface User {
-  uuid: string;
+  uuid?: string;
   firstName: String;
   lastName: String;
 }

@@ -13,7 +13,6 @@ const updateUserData = async (req, res) => {
     const user: User = {
       firstName: req.body["firstName"],
       lastName: req.body["lastName"],
-      uuid: uuid,
     };
 
     console.log(user);

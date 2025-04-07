@@ -18,7 +18,6 @@ const updateUserData = (req, res) => __awaiter(void 0, void 0, void 0, function*
         const user = {
             firstName: req.body["firstName"],
             lastName: req.body["lastName"],
-            uuid: uuid,
         };
         console.log(user);
         const newDoc = yield (0, firebaseConfig_1.updateUser)(uuid, user);
