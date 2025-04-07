@@ -1,15 +1,5 @@
 import { initializeApp } from "firebase/app";
-import {
-  collection,
-  doc,
-  getDocs,
-  getFirestore,
-  query,
-  setDoc,
-  updateDoc,
-  where,
-} from "firebase/firestore";
-import { v4 as uuidv4 } from "uuid";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDkpGCJM__o6TJNpQNBPDW0t9MHfqX0Nww",
@@ -36,79 +26,6 @@ const initializeFirebaseApp = () => {
   }
 };
 
-const updateData = async (collectionName: string, uuid: string, user: User) => {
-  try {
-    const collectionRef = collection(firestoreDB, collectionName);
-    const finalData = [];
-    const q = query(collectionRef, where("uuid", "==", uuid));
+const getFirestoreDB = () => firestoreDB;
 
-    const docSnap = await getDocs(q);
-
-    docSnap.forEach((doc) => {
-      finalData.push(doc.ref);
-    });
-
-    if (finalData.length == 0) {
-      throw new Error(
-        `Data with uuid: ${uuid} not found in collection: ${collectionName}`
-      );
-    }
-
-    await updateDoc(finalData[0], {
-      ...user,
-    });
-  } catch (error) {
-    console.log(`Error: ${error.message}`);
-  }
-};
-
-const insertData = async (collectionName: string, data: any) => {
-  let uuid = uuidv4();
-
-  try {
-    const document = doc(firestoreDB, collectionName, uuid);
-    await setDoc(document, data);
-
-    console.log(`New data inserted with uuid: ${uuid}`);
-  } catch (error) {
-    console.log(`Error: ${error}`);
-  }
-};
-
-const getAllData = async (collectionName: string) => {
-  try {
-    const collectionRef = collection(firestoreDB, collectionName);
-    const finalData = [];
-    const q = query(collectionRef);
-
-    const docSnap = await getDocs(q);
-
-    docSnap.forEach((doc) => {
-      finalData.push(doc.data());
-    });
-
-    return finalData;
-  } catch (error) {
-    console.log(`Error: ${error}`);
-  }
-};
-
-const getData = async (collectionName: string, uuid: string) => {
-  try {
-    const collectionRef = collection(firestoreDB, collectionName);
-    const finalData = [];
-    const q = query(collectionRef, where("uuid", "==", uuid));
-
-    const docSnap = await getDocs(q);
-
-    docSnap.forEach((doc) => {
-      finalData.push(doc.data());
-    });
-
-    return finalData[0] || {};
-  } catch (error) {
-    console.log(`Error: ${error}`);
-  }
-};
-
-export { getAllData, getData, initializeFirebaseApp, insertData, updateData };
+export { getFirestoreDB, initializeFirebaseApp };

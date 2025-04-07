@@ -1,10 +1,10 @@
 import { v4 as uuidv4 } from "uuid";
 import {
-  getAllData,
-  getData,
-  insertData,
-  updateData,
-} from "../config/firebaseConfig";
+  getAllUser,
+  getUser,
+  insertUser,
+  updateUser,
+} from "../repository/userCollection";
 
 const updateUserData = async (req, res) => {
   try {
@@ -25,7 +25,7 @@ const updateUserData = async (req, res) => {
 
     console.log(user);
 
-    await updateData("users", uuid, user);
+    await updateUser(uuid, user);
 
     res.status(200).json({
       data: {
@@ -64,7 +64,7 @@ const insertUserData = async (req, res) => {
 
     console.log(user);
 
-    await insertData("users", user);
+    await insertUser(user);
 
     res.status(201).json({
       data: user,
@@ -82,7 +82,7 @@ const insertUserData = async (req, res) => {
 
 const fetchAllUser = async (req, res) => {
   try {
-    const users = await getAllData("users");
+    const users = await getAllUser();
 
     console.log(users);
 
@@ -104,7 +104,7 @@ const fetchUserByUUID = async (req, res) => {
   try {
     const uuid = req.params.uuid || "";
 
-    const user = await getData("users", uuid);
+    const user = await getUser(uuid);
 
     console.log(user);
     res.status(200).json({

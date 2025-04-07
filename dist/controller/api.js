@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateUserData = exports.insertUserData = exports.fetchUserByUUID = exports.fetchAllUser = void 0;
 const uuid_1 = require("uuid");
-const firebaseConfig_1 = require("../config/firebaseConfig");
+const userCollection_1 = require("../repository/userCollection");
 const updateUserData = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const uuid = req.params.uuid || "";
@@ -26,7 +26,7 @@ const updateUserData = (req, res) => __awaiter(void 0, void 0, void 0, function*
             lastName: req.body["lastName"],
         };
         console.log(user);
-        yield (0, firebaseConfig_1.updateData)("users", uuid, user);
+        yield (0, userCollection_1.updateUser)(uuid, user);
         res.status(200).json({
             data: Object.assign(Object.assign({}, user), { uuid: uuid }),
             success: true,
@@ -57,7 +57,7 @@ const insertUserData = (req, res) => __awaiter(void 0, void 0, void 0, function*
             uuid: uuid,
         };
         console.log(user);
-        yield (0, firebaseConfig_1.insertData)("users", user);
+        yield (0, userCollection_1.insertUser)(user);
         res.status(201).json({
             data: user,
             success: true,
@@ -75,7 +75,7 @@ const insertUserData = (req, res) => __awaiter(void 0, void 0, void 0, function*
 exports.insertUserData = insertUserData;
 const fetchAllUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const users = yield (0, firebaseConfig_1.getAllData)("users");
+        const users = yield (0, userCollection_1.getAllUser)();
         console.log(users);
         res.status(200).json({
             data: users,
@@ -95,7 +95,7 @@ exports.fetchAllUser = fetchAllUser;
 const fetchUserByUUID = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const uuid = req.params.uuid || "";
-        const user = yield (0, firebaseConfig_1.getData)("users", uuid);
+        const user = yield (0, userCollection_1.getUser)(uuid);
         console.log(user);
         res.status(200).json({
             data: user,
