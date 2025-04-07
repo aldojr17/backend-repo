@@ -15,9 +15,6 @@ const firebaseConfig_1 = require("../config/firebaseConfig");
 const updateUserData = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const uuid = req.params.uuid || "";
-        if (uuid == "") {
-            throw new Error("uuid in query params is empty");
-        }
         if (req.body["firstName"] == "" || req.body["firstName"] == undefined) {
             throw new Error("firstName is required");
         }
@@ -40,7 +37,7 @@ const updateUserData = (req, res) => __awaiter(void 0, void 0, void 0, function*
         res.status(400).json({
             data: null,
             success: false,
-            message: error.message,
+            message: error,
         });
     }
 });
@@ -78,24 +75,40 @@ const insertUserData = (req, res) => __awaiter(void 0, void 0, void 0, function*
 exports.insertUserData = insertUserData;
 const fetchAllUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const newDoc = yield (0, firebaseConfig_1.getAllUser)();
-        console.log(newDoc);
-        res.status(201).send(`user get`);
+        const users = yield (0, firebaseConfig_1.getAllData)("users");
+        console.log(users);
+        res.status(200).json({
+            data: users,
+            success: true,
+            message: "Successfully get all user",
+        });
     }
     catch (error) {
-        res.status(400).send(`error`);
+        res.status(400).json({
+            data: null,
+            success: false,
+            message: error,
+        });
     }
 });
 exports.fetchAllUser = fetchAllUser;
 const fetchUserByUUID = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const uuid = req.params.uuid || "";
-        const newDoc = yield (0, firebaseConfig_1.getUser)(uuid);
-        console.log(newDoc);
-        res.status(201).send(`user get`);
+        const user = yield (0, firebaseConfig_1.getData)("users", uuid);
+        console.log(user);
+        res.status(200).json({
+            data: user,
+            success: true,
+            message: "Successfully get user",
+        });
     }
     catch (error) {
-        res.status(400).send(`error`);
+        res.status(400).json({
+            data: null,
+            success: false,
+            message: error,
+        });
     }
 });
 exports.fetchUserByUUID = fetchUserByUUID;

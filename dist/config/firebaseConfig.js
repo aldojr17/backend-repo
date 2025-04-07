@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateData = exports.insertData = exports.initializeFirebaseApp = exports.getUser = exports.getAllUser = void 0;
+exports.updateData = exports.insertData = exports.initializeFirebaseApp = exports.getData = exports.getAllData = void 0;
 const app_1 = require("firebase/app");
 const firestore_1 = require("firebase/firestore");
 const uuid_1 = require("uuid");
@@ -67,9 +67,9 @@ const insertData = (collectionName, data) => __awaiter(void 0, void 0, void 0, f
     }
 });
 exports.insertData = insertData;
-const getAllUser = () => __awaiter(void 0, void 0, void 0, function* () {
+const getAllData = (collectionName) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const collectionRef = (0, firestore_1.collection)(firestoreDB, "users");
+        const collectionRef = (0, firestore_1.collection)(firestoreDB, collectionName);
         const finalData = [];
         const q = (0, firestore_1.query)(collectionRef);
         const docSnap = yield (0, firestore_1.getDocs)(q);
@@ -79,23 +79,23 @@ const getAllUser = () => __awaiter(void 0, void 0, void 0, function* () {
         return finalData;
     }
     catch (error) {
-        console.log("Error get user, error: " + error);
+        console.log(`Error: ${error}`);
     }
 });
-exports.getAllUser = getAllUser;
-const getUser = (uuid) => __awaiter(void 0, void 0, void 0, function* () {
+exports.getAllData = getAllData;
+const getData = (collectionName, uuid) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const collectionRef = (0, firestore_1.collection)(firestoreDB, "users");
+        const collectionRef = (0, firestore_1.collection)(firestoreDB, collectionName);
         const finalData = [];
         const q = (0, firestore_1.query)(collectionRef, (0, firestore_1.where)("uuid", "==", uuid));
         const docSnap = yield (0, firestore_1.getDocs)(q);
         docSnap.forEach((doc) => {
             finalData.push(doc.data());
         });
-        return finalData;
+        return finalData[0] || {};
     }
     catch (error) {
-        console.log("Error get user, error: " + error);
+        console.log(`Error: ${error}`);
     }
 });
-exports.getUser = getUser;
+exports.getData = getData;

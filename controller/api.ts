@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import {
-  getAllUser,
-  getUser,
+  getAllData,
+  getData,
   insertData,
   updateData,
 } from "../config/firebaseConfig";
@@ -9,10 +9,6 @@ import {
 const updateUserData = async (req, res) => {
   try {
     const uuid = req.params.uuid || "";
-
-    if (uuid == "") {
-      throw new Error("uuid in query params is empty");
-    }
 
     if (req.body["firstName"] == "" || req.body["firstName"] == undefined) {
       throw new Error("firstName is required");
@@ -43,7 +39,7 @@ const updateUserData = async (req, res) => {
     res.status(400).json({
       data: null,
       success: false,
-      message: error.message,
+      message: error,
     });
   }
 };
@@ -86,24 +82,42 @@ const insertUserData = async (req, res) => {
 
 const fetchAllUser = async (req, res) => {
   try {
-    const newDoc = await getAllUser();
+    const users = await getAllData("users");
 
-    console.log(newDoc);
-    res.status(201).send(`user get`);
+    console.log(users);
+
+    res.status(200).json({
+      data: users,
+      success: true,
+      message: "Successfully get all user",
+    });
   } catch (error) {
-    res.status(400).send(`error`);
+    res.status(400).json({
+      data: null,
+      success: false,
+      message: error,
+    });
   }
 };
 
 const fetchUserByUUID = async (req, res) => {
   try {
     const uuid = req.params.uuid || "";
-    const newDoc = await getUser(uuid);
 
-    console.log(newDoc);
-    res.status(201).send(`user get`);
+    const user = await getData("users", uuid);
+
+    console.log(user);
+    res.status(200).json({
+      data: user,
+      success: true,
+      message: "Successfully get user",
+    });
   } catch (error) {
-    res.status(400).send(`error`);
+    res.status(400).json({
+      data: null,
+      success: false,
+      message: error,
+    });
   }
 };
 

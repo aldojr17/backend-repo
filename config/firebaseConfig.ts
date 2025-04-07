@@ -75,9 +75,9 @@ const insertData = async (collectionName: string, data: any) => {
   }
 };
 
-const getAllUser = async () => {
+const getAllData = async (collectionName: string) => {
   try {
-    const collectionRef = collection(firestoreDB, "users");
+    const collectionRef = collection(firestoreDB, collectionName);
     const finalData = [];
     const q = query(collectionRef);
 
@@ -89,13 +89,13 @@ const getAllUser = async () => {
 
     return finalData;
   } catch (error) {
-    console.log("Error get user, error: " + error);
+    console.log(`Error: ${error}`);
   }
 };
 
-const getUser = async (uuid: string) => {
+const getData = async (collectionName: string, uuid: string) => {
   try {
-    const collectionRef = collection(firestoreDB, "users");
+    const collectionRef = collection(firestoreDB, collectionName);
     const finalData = [];
     const q = query(collectionRef, where("uuid", "==", uuid));
 
@@ -105,10 +105,10 @@ const getUser = async (uuid: string) => {
       finalData.push(doc.data());
     });
 
-    return finalData;
+    return finalData[0] || {};
   } catch (error) {
-    console.log("Error get user, error: " + error);
+    console.log(`Error: ${error}`);
   }
 };
 
-export { getAllUser, getUser, initializeFirebaseApp, insertData, updateData };
+export { getAllData, getData, initializeFirebaseApp, insertData, updateData };
