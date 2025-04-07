@@ -1,12 +1,7 @@
 import { getAccessToken } from "../repository/tokenCollection";
 
-export const authMiddleware = (req, res, next) => {
+export const authMiddleware = async (req, res, next) => {
   try {
-    if (req.originalUrl === "/generate-access-token") {
-      console.log(req.url);
-      next();
-    }
-
     console.log("access token checking");
 
     let accessToken = req.headers["access-token"] || "";
@@ -15,7 +10,7 @@ export const authMiddleware = (req, res, next) => {
       throw new Error("access-token is missing from headers");
     }
 
-    let currentAccessToken = getAccessToken().then((val) => val);
+    let currentAccessToken = await getAccessToken();
     console.log(currentAccessToken);
 
     if (accessToken != currentAccessToken) {

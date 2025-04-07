@@ -15,6 +15,8 @@ export const generateNewAccessToken = async () => {
       token: uuid,
     });
 
+    console.log(`New access token generated: ${uuid}`);
+
     return uuid;
   } catch (error) {
     console.log(`Error: ${error.message}`);

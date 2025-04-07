@@ -22,6 +22,7 @@ const generateNewAccessToken = () => __awaiter(void 0, void 0, void 0, function*
         yield (0, firestore_1.updateDoc)(accessTokenRef, {
             token: uuid,
         });
+        console.log(`New access token generated: ${uuid}`);
         return uuid;
     }
     catch (error) {

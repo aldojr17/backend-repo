@@ -9,11 +9,11 @@ initializeFirebaseApp();
 const PORT = 3000;
 
 const app = express();
+app.use("/", tokenRoutes);
 app.use(authMiddleware);
 app.use(express.json());
 
 app.use("/", userRoutes);
-app.use("/", tokenRoutes);
 
 app.listen(PORT, function (err) {
   if (err) console.log(err);
