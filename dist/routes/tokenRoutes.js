@@ -4,10 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const userApi_1 = require("../controller/userApi");
+const tokenApi_1 = require("../controller/tokenApi");
 const router = express_1.default.Router();
-router.put("/update-user-data/:uuid", userApi_1.updateUserData);
-router.get("/fetch-user-data", userApi_1.fetchAllUser);
-router.post("/users", userApi_1.insertUserData);
-router.get("/users/:uuid", userApi_1.fetchUserByUUID);
+router.get("/generate-access-token", tokenApi_1.generateToken);
 exports.default = router;

@@ -1,1 +1,1 @@
-{"root":["../config/firebaseconfig.ts","../controller/api.ts","../core/app.ts","../entities/user.ts","../middleware/authmiddleware.ts","../middleware/index.ts","../repository/usercollection.ts","../routes/userroutes.ts"],"version":"5.8.3"}
+{"root":["../config/firebaseconfig.ts","../controller/tokenapi.ts","../controller/userapi.ts","../core/app.ts","../entities/user.ts","../middleware/authmiddleware.ts","../repository/tokencollection.ts","../repository/usercollection.ts","../routes/tokenroutes.ts","../routes/userroutes.ts"],"version":"5.8.3"}

@@ -4,7 +4,7 @@ import {
   fetchUserByUUID,
   insertUserData,
   updateUserData,
-} from "../controller/api";
+} from "../controller/userApi";
 
 const router = express.Router();
 
